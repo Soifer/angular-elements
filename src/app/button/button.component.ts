@@ -1,14 +1,39 @@
 import {
   Input,
+  Output,
   Component,
-  ViewEncapsulation,
-  EventEmitter,
-  Output
+  ViewEncapsulation
 } from '@angular/core';
+import { EventEmitter } from 'events';
 
 @Component({
   selector: 'custom-button',
-  template: `<button (click)="handleClick()">{{label}}</button>`,
+  template: `
+  <div class="grid-container">
+  <h1 class="mat-h1" (click)="onClick">{{label}}</h1>
+  <mat-grid-list cols="2" rowHeight="350px">
+    <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{card.title}}
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>Card Content Here</div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+  `,
   styles: [
     `
     button {
@@ -17,17 +42,44 @@ import {
       background: #bada55;
       font-size: 20px;
     }
+    .grid-container {
+      margin: 20px;
+    }
+    
+    .dashboard-card {
+      position: absolute !important;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+    }
+    
+    .more-button {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+    }
+    
+    .dashboard-card-content {
+      text-align: center;
+    }
   `
   ],
   encapsulation: ViewEncapsulation.Native
 })
 export class ButtonComponent {
+  constructor() { }
   @Input() label = 'default label';
-  @Output() action = new EventEmitter<number>();
-  private clicksCt = 0;
+  @Output() publish = new EventEmitter();
 
-  handleClick() {
-    this.clicksCt++;
-    this.action.emit(this.clicksCt);
+  cards = [
+    { title: 'Card 1', cols: 2, rows: 1 },
+    { title: 'Card 2', cols: 1, rows: 1 },
+    { title: 'Card 3', cols: 1, rows: 2 },
+    { title: 'Card 4', cols: 1, rows: 1 }
+  ];
+  onClick() {
+    this.publish.emit('Hello from Angular 6 ^-^');
   }
+
 }
