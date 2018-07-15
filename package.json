@@ -4,15 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "buil":"ng build",
-    "build:prod": "ng build --prod --output-hashing=all",
     "package": "cat dist/angular6-elements/{runtime1,polyfills1,scripts1,main1}.js | gzip > elements.js.gz",
     "serve": "http-server --gzip ",
     "servel": "http-server ",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:elements": "ng build --prod --output-hashing all && node elements-build.js"
+    "build": "ng build",
+    "build:prod": "ng build --prod --output-hashing=all",
+    "build:elements": "npm run build:prod && node elements-build.js"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +32,8 @@
     "core-js": "^2.5.4",
     "document-register-element": "^1.7.2",
     "fs-extra": "^6.0.1",
+    "glob": "^7.1.2",
+    "path-to-regexp": "^2.2.1",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },
